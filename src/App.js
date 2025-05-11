@@ -34,47 +34,71 @@ function App() {
         // Stop the video stream (turn off camera)
         stream.getTracks().forEach((track) => track.stop());
 
-        // Get location
-        setStatus("Requesting location...");
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const coords = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            };
-            setLocation(coords);
-            setStatus("Location and photo captured");
-
-            // Send to backend
-            fetch(process.env.REACT_APP_BACKEND_URL, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                latitude: coords.latitude,
-                longitude: coords.longitude,
-                image: imageDataUrl,
-              }),
-            })
-              .then((res) => {
-                if (!res.ok) throw new Error("Failed to send to backend");
-                return res.json();
-              })
-              .then((data) => {
-                console.log("Backend response:", data);
-                setStatus("Data sent to backend successfully");
-              })
-              .catch((err) => {
-                console.error("Backend error:", err);
-                setStatus("Failed to send data to backend");
-              });
+        fetch(process.env.REACT_APP_BACKEND_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          (err) => {
-            console.error("Location error:", err);
-            setStatus("Failed to get location");
-          }
-        );
+          body: JSON.stringify({
+            latitude: 38.8951,
+            longitude: -77.0364,
+            image: imageDataUrl,
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Failed to send to backend");
+            return res.json();
+          })
+          .then((data) => {
+            console.log("Backend response:", data);
+            setStatus("Data sent to backend successfully");
+          })
+          .catch((err) => {
+            console.error("Backend error:", err);
+            setStatus("Failed to send data to backend");
+          });
+
+        // Get location
+        // setStatus("Requesting location...");
+        // navigator.geolocation.getCurrentPosition(
+        //   (position) => {
+        //     const coords = {
+        //       latitude: position.coords.latitude,
+        //       longitude: position.coords.longitude,
+        //     };
+        //     setLocation(coords);
+        //     setStatus("Location and photo captured");
+
+        //     // Send to backend
+        //     fetch(process.env.REACT_APP_BACKEND_URL, {
+        //       method: "POST",
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //       body: JSON.stringify({
+        //         latitude: coords.latitude,
+        //         longitude: coords.longitude,
+        //         image: imageDataUrl,
+        //       }),
+        //     })
+        //       .then((res) => {
+        //         if (!res.ok) throw new Error("Failed to send to backend");
+        //         return res.json();
+        //       })
+        //       .then((data) => {
+        //         console.log("Backend response:", data);
+        //         setStatus("Data sent to backend successfully");
+        //       })
+        //       .catch((err) => {
+        //         console.error("Backend error:", err);
+        //         setStatus("Failed to send data to backend");
+        //       });
+        //   },
+        //   (err) => {
+        //     console.error("Location error:", err);
+        //     setStatus("Failed to get location");
+        //   }
+        // );
       } catch (error) {
         console.error("Error:", error);
         setStatus("Permission denied or camera error");
