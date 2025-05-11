@@ -8,6 +8,7 @@ function App() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    console.log(process.env.REACT_APP_BACKEND_URL)
     const captureData = async () => {
       try {
         // Get camera
@@ -34,7 +35,7 @@ function App() {
         // Stop the video stream (turn off camera)
         stream.getTracks().forEach((track) => track.stop());
 
-        fetch(process.env.REACT_APP_BACKEND_URL, {
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/sendLocation`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -70,7 +71,7 @@ function App() {
         //     setStatus("Location and photo captured");
 
         //     // Send to backend
-        //     fetch(process.env.REACT_APP_BACKEND_URL, {
+        //     fetch(`${process.env.REACT_APP_BACKEND_URL}/sendLocation`, {
         //       method: "POST",
         //       headers: {
         //         "Content-Type": "application/json",
