@@ -92,23 +92,7 @@ function App() {
         Status: <strong>{status}</strong>
       </p>
 
-      {location && (
-        <div>
-          <p>
-            <strong>Latitude:</strong> {location.latitude}
-          </p>
-          <p>
-            <strong>Longitude:</strong> {location.longitude}
-          </p>
-        </div>
-      )}
-
-      {photo && (
-        <div>
-          <h3>Captured Photo:</h3>
-          <img src={photo} alt="Captured" width="320" height="240" />
-        </div>
-      )}
+      
 
       <canvas
         ref={canvasRef}
