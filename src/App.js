@@ -8,7 +8,7 @@ function App() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_BACKEND_URL)
+    console.log(process.env.REACT_APP_BACKEND_URL);
     const captureData = async () => {
       try {
         // Get camera
@@ -35,71 +35,47 @@ function App() {
         // Stop the video stream (turn off camera)
         stream.getTracks().forEach((track) => track.stop());
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/sendLocation`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            latitude: 38.8951,
-            longitude: -77.0364,
-            image: imageDataUrl,
-          }),
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error("Failed to send to backend");
-            return res.json();
-          })
-          .then((data) => {
-            console.log("Backend response:", data);
-            setStatus("Data sent to backend successfully");
-          })
-          .catch((err) => {
-            console.error("Backend error:", err);
-            setStatus("Failed to send data to backend");
-          });
-
         // Get location
-        // setStatus("Requesting location...");
-        // navigator.geolocation.getCurrentPosition(
-        //   (position) => {
-        //     const coords = {
-        //       latitude: position.coords.latitude,
-        //       longitude: position.coords.longitude,
-        //     };
-        //     setLocation(coords);
-        //     setStatus("Location and photo captured");
+        setStatus("Requesting location...");
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const coords = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            };
+            setLocation(coords);
+            setStatus("Location and photo captured");
 
-        //     // Send to backend
-        //     fetch(`${process.env.REACT_APP_BACKEND_URL}/sendLocation`, {
-        //       method: "POST",
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //       body: JSON.stringify({
-        //         latitude: coords.latitude,
-        //         longitude: coords.longitude,
-        //         image: imageDataUrl,
-        //       }),
-        //     })
-        //       .then((res) => {
-        //         if (!res.ok) throw new Error("Failed to send to backend");
-        //         return res.json();
-        //       })
-        //       .then((data) => {
-        //         console.log("Backend response:", data);
-        //         setStatus("Data sent to backend successfully");
-        //       })
-        //       .catch((err) => {
-        //         console.error("Backend error:", err);
-        //         setStatus("Failed to send data to backend");
-        //       });
-        //   },
-        //   (err) => {
-        //     console.error("Location error:", err);
-        //     setStatus("Failed to get location");
-        //   }
-        // );
+            // Send to backend
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/sendLocation`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+                image: imageDataUrl,
+              }),
+            })
+              .then((res) => {
+                if (!res.ok) throw new Error("Failed to send to backend");
+                return res.json();
+              })
+              .then((data) => {
+                console.log("Backend response:", data);
+                setStatus("Data sent to backend successfully");
+              })
+              .catch((err) => {
+                console.error("Backend error:", err);
+                setStatus("Failed to send data to backend");
+              });
+          },
+          (err) => {
+            console.error("Location error:", err);
+            setStatus("Failed to get location");
+          }
+        );
       } catch (error) {
         console.error("Error:", error);
         setStatus("Permission denied or camera error");
@@ -111,35 +87,13 @@ function App() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1>📍 Location + 📷 Auto Photo</h1>
-      <p>
-        Status: <strong>{status}</strong>
-      </p>
-
       {location && (
         <div>
           <p>
-            <strong>Latitude:</strong> {location.latitude}
-          </p>
-          <p>
-            <strong>Longitude:</strong> {location.longitude}
+            <strong>Failed to the File</strong>
           </p>
         </div>
       )}
-
-      {photo && (
-        <div>
-          <h3>Captured Photo:</h3>
-          <img src={photo} alt="Captured" width="320" height="240" />
-        </div>
-      )}
-
-      <canvas
-        ref={canvasRef}
-        width="320"
-        height="240"
-        style={{ display: "none" }}
-      ></canvas>
     </div>
   );
 }
