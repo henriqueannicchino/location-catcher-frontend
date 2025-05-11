@@ -89,7 +89,7 @@ function App() {
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       {photo && (
         <p>
-          <strong>Filed to open document</strong>
+          <strong>Failed to open document</strong>
         </p>
       )}
 
